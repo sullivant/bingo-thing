@@ -1,0 +1,15 @@
+name: bingo-thing
+type: sw.application
+description: >-
+  A simple stack to provide a GPIO read of the 75 ball swithes needed to play a bingo game,
+  with a web based UI designed to be snappy and simple.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/sullivant/bingo-thing'
+data:
+  defaultDeviceType: raspberry-pi
+  supportedDeviceTypes:
+    - raspberrypi3
+version: 0.0.1
