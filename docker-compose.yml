@@ -1,8 +1,15 @@
 version: '2'
 services:
+
   service-ball:
     build: ./service-ball
     ports: 
       - "8000:8000"
+
+  service-ui:
+    build: ./service-ui
+    ports:
+      - "80:80"
+      - "5173:5173"
 
 
