@@ -3,9 +3,10 @@ import { computed, reactive, ref } from 'vue'
 import { useFetch } from '@vueuse/core'
 import { useToggle } from '@vueuse/shared'
 
+let url = 'http://service-ball:8000/balls';
 
 function getPosts() {
-  fetch('http://service-ball:8000/balls')
+  fetch(url)
   .then(response => response.json())
   .then(data => console.log(data));
 }
@@ -14,7 +15,7 @@ function getPosts() {
 
 <template>
   <header>
-    This is a simple header.
+    This is a simple header. {{ url }}
   </header>
 
   <main>
