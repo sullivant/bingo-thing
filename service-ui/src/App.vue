@@ -5,7 +5,7 @@ import { useToggle } from '@vueuse/shared'
 
 
 function getPosts() {
-  fetch('http://localhost:8000/balls')
+  fetch('http://service-ball:8000/balls')
   .then(response => response.json())
   .then(data => console.log(data));
 }
