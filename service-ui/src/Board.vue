@@ -1,19 +1,15 @@
 <script setup lang="ts">
-    import { defineComponent } from 'vue'
-    import { onUpdated, ref } from 'vue'
-
     const props = defineProps(['ballData']);
-    // var ballStates = new Array<boolean>();
-    // onUpdated(() => {
-    //     ballStates.value = props.ballData;
-    // });
 
     function getBoard() {
         const board = [];
+
+        // For 15 rows
         for (let i = 0; i < 15; i++) { 
             const row = [];
+            // For 5 columns (B,I,N,G,O)
             for (let j = 0; j < 5; j++) {
-                const thisNumber = (i * 5 + j);
+                const thisNumber = (i + 15 * j);
                 const cellData = props.ballData[thisNumber];
                 row.push({
                     number: thisNumber+1,
@@ -28,7 +24,6 @@
 </script>
 
 <template>
-    board data in template <br/>
     <div class="bingo-board">
         <table>
             <thead>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue'
-import { useFetch } from '@vueuse/core'
-import { useToggle } from '@vueuse/shared'
+import { onMounted, ref } from 'vue'
 import board from './Board.vue'
 
 let url = 'http://service-ball:8000/balls';
@@ -23,22 +21,17 @@ async function updateBallStates() {
 }
 
 onMounted(async () => {
-  // const newStates = await fetchBallStates();
-  // ballStates.value = newStates;
   await updateBallStates();
+
+  let pollInterval = setInterval(updateBallStates, 1000) 
+  // setTimeout(() => { clearInterval(pollInterval) }, 5000) 
 })
 
 </script>
 
 <template>
-  <header>
-    This is a simple header. {{ url }}
-  </header>
-
   <main>
-    This is main content.
-
-    <button @click="updateBallStates()">Update Ball States</button>
+    <button @click="updateBallStates()">Update Balls</button>
 
     <div>
       <board :ballData="ballStates" />
@@ -47,16 +40,5 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-}
 </style>
