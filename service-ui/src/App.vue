@@ -1,15 +1,32 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import { useFetch } from '@vueuse/core'
 import { useToggle } from '@vueuse/shared'
+import board from './Board.vue'
 
 let url = 'http://service-ball:8000/balls';
 
-function getPosts() {
-  fetch(url)
-  .then(response => response.json())
-  .then(data => console.log(data));
+const ballStates: any = ref([])
+
+async function fetchBallStates() {
+  console.log("Fetching ball states");
+  const res = await fetch(url);
+  const data = await res.json();
+  const newObject = data;
+  console.log("New ball states: ", newObject);
+  return newObject;
 }
+
+async function updateBallStates() {
+  const newStates = await fetchBallStates();
+  ballStates.value = newStates;
+}
+
+onMounted(async () => {
+  // const newStates = await fetchBallStates();
+  // ballStates.value = newStates;
+  await updateBallStates();
+})
 
 </script>
 
@@ -21,8 +38,11 @@ function getPosts() {
   <main>
     This is main content.
 
-    <button @click="getPosts">Show Balls</button>
+    <button @click="updateBallStates()">Update Ball States</button>
 
+    <div>
+      <board :ballData="ballStates" />
+    </div>
   </main>
 </template>
 

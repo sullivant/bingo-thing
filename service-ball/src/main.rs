@@ -1,6 +1,9 @@
+use std::array;
+
 use warp::Filter;
 use warp::http::StatusCode;
 use warp::reply::json;
+use rand::Rng;
 
 
 #[tokio::main]
@@ -30,7 +33,14 @@ async fn main() {
 /// TODO: Implement in hardware, for now this just returns 75 static bits that change only slightly
 ///       to mimic a game in progress.
 pub async fn handle_ball_state() -> Result<impl warp::Reply, warp::Rejection> {
-    let ball_states = vec![0,0,0,0,1,1,1,1]; // Just a few balls to start
+    let array_size = 75;
+    let mut ball_states = Vec::with_capacity(array_size);
+    let mut rng = rand::thread_rng();
+
+    for _ in 0..array_size {
+        let this_bit: u8 = rng.gen_range(0..=1);
+        ball_states.push(this_bit);
+    }
     
     Ok(warp::reply::with_status(json(&ball_states),  StatusCode::OK))
 }

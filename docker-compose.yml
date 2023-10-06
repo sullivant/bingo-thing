@@ -6,9 +6,9 @@ services:
     ports: 
       - "8000:8000"
 
-  service-ui:
-    build: ./service-ui
-    ports:
-      - "80:80"
+# service-ui:
+#   build: ./service-ui
+#   ports:
+#     - "80:80"
 
 
