@@ -30,13 +30,29 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main>
+
+<v-layout>
+  <v-main>
+    <v-card
+      class="mx-auto"
+      width="400"
+      prepend-icon="mdi-home"
+    >
+      <template v-slot:title>
+        This is a title
+      </template>
+
+      <v-card-text>
+        This is content
+      </v-card-text>
+    </v-card>
+
     <div>
       <board :ballData="ballStates" />
     </div>
     <button @click="updateBallStates()">Update Balls</button>
-
-  </main>
+</v-main>
+</v-layout>
 </template>
 
 <style scoped>
