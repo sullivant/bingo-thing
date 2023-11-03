@@ -28,7 +28,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>B</th>
+                    <th class="ballHeader">B</th>
                     <th>I</th>
                     <th>N</th>
                     <th>G</th>
@@ -38,7 +38,7 @@
             <tbody>
                 <tr v-for="(row, rowIndex) in getBoard()" :key="rowIndex">
                     <td v-for="(cell, colIndex) in row" :key="colIndex">
-                        <div class="cell" :class="{ 'marked' : cell.marked }"> {{ cell.number }}</div>
+                        <div class="ballCard" :class="{ 'marked' : cell.marked }"> {{ cell.number }}</div>
                     </td>
                 </tr>
             </tbody>
@@ -52,8 +52,11 @@
 .bingo-board {
     /* bingo board styles */
 }
-.cell {
+.ballCard {
     /* cell styles */
+}
+.ballHeader {
+    
 }
 .marked {
     background-color: #FF0000; /* for when a cell has a ball present */

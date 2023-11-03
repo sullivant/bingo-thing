@@ -31,11 +31,11 @@ onMounted(async () => {
 
 <template>
   <main>
-    <button @click="updateBallStates()">Update Balls</button>
-
     <div>
       <board :ballData="ballStates" />
     </div>
+    <button @click="updateBallStates()">Update Balls</button>
+
   </main>
 </template>
 
