@@ -1,19 +1,25 @@
 <script setup lang="ts">
     const props = defineProps(['ballData']);
 
+    const letters = ["B","I","N","G","O"];
+
     function getBoard() {
         const board = [];
 
-        // For 15 rows
-        for (let i = 0; i < 15; i++) { 
+        // For 5 rows (B I N G O)
+        for (let i = 0; i < 5; i++) { 
             const row = [];
-            // For 5 columns (B,I,N,G,O)
-            for (let j = 0; j < 5; j++) {
-                const thisNumber = (i + 15 * j);
+            // Push the letter
+            row.push({number: letters[i], marked: false, class: "ballHeader"});
+
+            // For 15 columns
+            for (let j = 0; j < 15; j++) {
+                const thisNumber = (i*15) + j;
                 const cellData = props.ballData[thisNumber];
                 row.push({
                     number: thisNumber+1,
                     marked: cellData > 0 ? true : false,
+                    class: "ballCard",
                 })
             }
             board.push(row);
@@ -26,19 +32,11 @@
 <template>
     <div class="bingo-board">
         <table>
-            <thead>
-                <tr>
-                    <th class="ballHeader">B</th>
-                    <th>I</th>
-                    <th>N</th>
-                    <th>G</th>
-                    <th>O</th>
-                </tr>
-            </thead>
+
             <tbody>
                 <tr v-for="(row, rowIndex) in getBoard()" :key="rowIndex">
                     <td v-for="(cell, colIndex) in row" :key="colIndex">
-                        <div class="ballCard" :class="{ 'marked' : cell.marked }"> {{ cell.number }}</div>
+                        <div :class="[cell.class, { 'marked' : cell.marked }]"> {{ cell.number }}</div>
                     </td>
                 </tr>
             </tbody>
@@ -56,7 +54,7 @@
     /* cell styles */
 }
 .ballHeader {
-    
+    font-weight: bold;
 }
 .marked {
     background-color: #FF0000; /* for when a cell has a ball present */
