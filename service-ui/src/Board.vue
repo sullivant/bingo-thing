@@ -36,7 +36,7 @@
             <tbody>
                 <tr v-for="(row, rowIndex) in getBoard()" :key="rowIndex">
                     <td v-for="(cell, colIndex) in row" :key="colIndex">
-                        <div :class="[cell.class, { 'marked' : cell.marked }]"> {{ cell.number }}</div>
+                        <div :class="[cell.class, { 'ballMarked' : cell.marked }]"> {{ cell.number }}</div>
                     </td>
                 </tr>
             </tbody>
@@ -56,7 +56,7 @@
 .ballHeader {
     font-weight: bold;
 }
-.marked {
+.ballMarked {
     background-color: #FF0000; /* for when a cell has a ball present */
 }
 </style>

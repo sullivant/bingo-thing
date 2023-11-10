@@ -32,6 +32,17 @@ onMounted(async () => {
 <template>
 
 <v-layout>
+  <v-app-bar :elevation="2">
+    <template v-slot:prepend>
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        </template>
+
+        <v-app-bar-title>Bingo</v-app-bar-title>
+
+        <template v-slot:append>
+          <v-btn icon="mdi-dots-vertical"></v-btn>
+        </template>
+  </v-app-bar>
   <v-main>
     <v-card
       class="mx-auto"
@@ -43,13 +54,10 @@ onMounted(async () => {
       </template>
 
       <v-card-text>
-        This is content
+        <board :ballData="ballStates" />
       </v-card-text>
     </v-card>
 
-    <div>
-      <board :ballData="ballStates" />
-    </div>
     <button @click="updateBallStates()">Update Balls</button>
 </v-main>
 </v-layout>
