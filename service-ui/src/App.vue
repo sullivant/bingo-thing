@@ -31,36 +31,48 @@ onMounted(async () => {
 
 <template>
 
-<v-layout>
-  <v-app-bar :elevation="2">
-    <template v-slot:prepend>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        </template>
+<v-layout class="rounded rounded-md">
+  <v-app-bar color="surface-variant" title="Bingo Thing"></v-app-bar>
 
-        <v-app-bar-title>Bingo</v-app-bar-title>
+  <v-navigation-drawer expand-on-hover rail>
+      <v-divider></v-divider>
 
-        <template v-slot:append>
-          <v-btn icon="mdi-dots-vertical"></v-btn>
-        </template>
-  </v-app-bar>
-  <v-main>
-    <v-card
-      class="mx-auto"
-      width="400"
-      prepend-icon="mdi-home"
-    >
-      <template v-slot:title>
-        This is a title
-      </template>
+        <v-list density="compact" nav>
+          <v-list-item
+            prepend-icon="mdi-robot-love-outline"
+            title="Controls"
+          />
+          <v-divider/>
 
-      <v-card-text>
-        <board :ballData="ballStates" />
-      </v-card-text>
-    </v-card>
+          <v-list-item prepend-icon="mdi-memory" title="Update Ball States" @click="updateBallStates()"></v-list-item>
+        </v-list>
+    </v-navigation-drawer>
 
-    <button @click="updateBallStates()">Update Balls</button>
-</v-main>
+
+    <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
+      <v-sheet :height="500" :width="500" rounded>
+        <div style="display: flex; height: 500px; width: 500px;">
+          <v-card class="mx-auto" width="500" prepend-icon="mdi-home" >
+            <template v-slot:title>
+              This is a title
+            </template>
+
+            <v-card-text>
+              <board :ballData="ballStates" />
+            </v-card-text>
+          </v-card>
+        </div>
+      </v-sheet>
+    </v-main>
+
+    <v-bottom-navigation>
+      <v-footer>
+        {{ new Date().getFullYear() }} - Winsted Fire Department
+      </v-footer>
+    </v-bottom-navigation> 
+
 </v-layout>
+
 </template>
 
 <style scoped>

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.4.1",
+    "@babel/types": "^7.23.6",
+    "@mdi/font": "7.0.96",    
     "build": "^0.1.4",
     "vue": "^3.3.4",
     "vuetify": "^3.3.23"

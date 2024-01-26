@@ -9,12 +9,15 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+// Plugins
+import { registerPlugins } from '@/plugins'
+
 const vuetify = createVuetify({
   components,
   directives,
 })
 
-createApp(App).use(vuetify).mount('#app')
-
-
+const app = createApp(App)
+registerPlugins(app)
+app.use(vuetify).mount('#app')
 // createApp(App).mount('#app')
