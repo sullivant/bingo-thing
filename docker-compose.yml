@@ -12,7 +12,7 @@ services:
       - "80:80"
 
   browser:
-    image: bh.cr/balenalabs/browser-aarch64 # where <arch> is one of aarch64, arm32 or amd64
+    image: bh.cr/balenalabs/browser-arm32 # where <arch> is one of aarch64, arm32 or amd64
     privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
     ports:
       - '5011' # management API (optional)
