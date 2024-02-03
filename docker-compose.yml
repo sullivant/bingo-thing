@@ -3,6 +3,7 @@ services:
 
   service-ball:
     build: ./service-ball
+    init: true
     ports: 
       - "8000:8000"
 
