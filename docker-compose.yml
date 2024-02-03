@@ -3,7 +3,6 @@ services:
 
   service-ball:
     build: ./service-ball
-    init: true
     ports: 
       - "8000:8000"
 
@@ -21,9 +20,9 @@ services:
       - '35173' # Chromium debugging port (optional)
     environment:
       LAUNCH_URL: http://service-ui/
-      KIOSK: 0
-      SHOW_CURSOR: 1
+      KIOSK: 1
+      SHOW_CURSOR: 0
       ENABLE_GPU: 1
-      WINDOW_SIZE: 1280,1024
+      # WINDOW_SIZE: 1280,1024
     # volumes:
     #   - 'settings:/data' # Only required if using PERSISTENT flag (see below)
