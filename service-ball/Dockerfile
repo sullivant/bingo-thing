@@ -2,7 +2,6 @@ FROM rust:1.75.0-slim as builder
 
 # 1. Create a new empty shell project
 WORKDIR /usr/src/
-RUN rustup target add aarch64-unknown-linux-gnu
 RUN USER=root cargo new --bin service-ball
 WORKDIR /usr/src/service-ball
 
@@ -19,7 +18,7 @@ COPY ./src ./src
 
 # 5. Build for release.
 RUN rm ./target/release/deps/service_ball*
-RUN cargo install --target aarch64-unknown-linux-gnu --path .
+RUN cargo install --path .
 
 # # Final image prep for a smaller size
 FROM rust:1.75.0-slim as release
