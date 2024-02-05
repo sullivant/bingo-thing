@@ -54,7 +54,7 @@ onMounted(async () => {
         <div style="display: flex; height: 500px; width: 500px;">
           <v-card class="mx-auto" width="500" prepend-icon="mdi-home" >
             <template v-slot:title>
-              BINGO
+              BINGO Thing
             </template>
 
             <v-card-text>
