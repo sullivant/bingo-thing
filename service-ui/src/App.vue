@@ -71,7 +71,7 @@ function toggleSimulate() {
         <v-container>
           <v-row>
             <v-col>
-              <v-card class="mx-auto" prepend-icon="mdi-home" color="grey-lighten-4" >
+              <v-card class="mx-auto" prepend-icon="mdi-home" color="grey-lighten-2" >
                 <template v-slot:title>BINGO</template>
               </v-card>
             </v-col>

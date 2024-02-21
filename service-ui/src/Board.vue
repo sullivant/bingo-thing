@@ -10,7 +10,7 @@
         for (let i = 0; i < 5; i++) { 
             const row = [];
             // Push the letter
-            row.push({letter: letters[i], number: -1, marked: false, class: "ballHeader", color: "grey-lighten-4"});
+            row.push({letter: letters[i], number: -1, marked: false, class: "ballHeader", color: "grey-lighten-2"});
 
             // For 15 columns
             for (let j = 0; j < 15; j++) {
@@ -20,7 +20,7 @@
                     number: thisNumber+1,
                     marked: cellData > 0 ? true : false,
                     class: "ballCard",
-                    color: cellData > 0 ? "red-lighten-2" : "lime-lighten-5"
+                    color: cellData > 0 ? "deep-orange-lighten-2" : "grey-lighten-4"
                 })
             }
             board.push(row);
