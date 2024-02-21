@@ -5,6 +5,7 @@ import board from './Board.vue'
 let url = 'http://service-ball:8000/balls';
 
 const ballStates: any = ref([])
+let doSimulate: boolean = true;
 
 async function fetchBallStates() {
   console.log("Fetching ball states");
@@ -20,12 +21,27 @@ async function updateBallStates() {
   ballStates.value = newStates;
 }
 
-onMounted(async () => {
+async function simulateBallStates() {
+  if (!doSimulate) { return; }
   await updateBallStates();
+}
 
-  let pollInterval = setInterval(updateBallStates, 1000) 
+onMounted(async () => {
+  // await simulateBallStates();
+
+  let pollInterval = setInterval(simulateBallStates, 2000) 
   // setTimeout(() => { clearInterval(pollInterval) }, 5000) 
 })
+
+function clearAllBalls() {
+  ballStates.value.map(function(value :any, key :any) {
+    ballStates.value[key] = 0;
+  })
+}
+
+function toggleSimulate() {
+  doSimulate = !doSimulate;
+}
 
 </script>
 
@@ -43,8 +59,10 @@ onMounted(async () => {
             title="Controls"
           />
           <v-divider/>
-
-          <v-list-item prepend-icon="mdi-memory" title="Update Ball States" @click="updateBallStates()"></v-list-item>
+          <v-list-item prepend-icon="mdi-refresh" title="Update Ball States" @click="updateBallStates()"></v-list-item>
+          <v-list-item prepend-icon="mdi-lightbulb-off-outline" title="Clear Ball States" @click="clearAllBalls()"></v-list-item>
+          <v-divider/>
+          
         </v-list>
     </v-navigation-drawer>
 
@@ -53,7 +71,7 @@ onMounted(async () => {
         <v-container>
           <v-row>
             <v-col>
-              <v-card class="mx-auto" prepend-icon="mdi-home">
+              <v-card class="mx-auto" prepend-icon="mdi-home" color="grey-lighten-4" >
                 <template v-slot:title>BINGO</template>
               </v-card>
             </v-col>

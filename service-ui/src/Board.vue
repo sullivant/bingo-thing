@@ -10,7 +10,7 @@
         for (let i = 0; i < 5; i++) { 
             const row = [];
             // Push the letter
-            row.push({number: letters[i], marked: false, class: "ballHeader"});
+            row.push({letter: letters[i], number: -1, marked: false, class: "ballHeader", color: "grey-lighten-4"});
 
             // For 15 columns
             for (let j = 0; j < 15; j++) {
@@ -20,11 +20,16 @@
                     number: thisNumber+1,
                     marked: cellData > 0 ? true : false,
                     class: "ballCard",
+                    color: cellData > 0 ? "red-lighten-2" : "lime-lighten-5"
                 })
             }
             board.push(row);
         }
         return board;
+    }
+
+    function toggleCard(cell: number) {
+        props.ballData[cell] = props.ballData[cell] > 0 ? 0 : 1;
     }
     
 </script>
@@ -34,8 +39,8 @@
         <!-- <v-container fluid> -->
             <v-row v-for="(row, rowIndex) in getBoard()" :key="rowIndex" dense>
                 <v-col v-for="(cell, colIndex) in row" :key="colIndex" :cols="16">
-                    <v-card>
-                        <v-card-title v-text=cell.number :class="[cell.class, { 'ballMarked' : cell.marked }]"></v-card-title>
+                    <v-card elevation="4" key="foo" :color=cell.color variant="flat" :class="cell.class" link @click="toggleCard(cell.number-1)">
+                        <v-card-title v-text="cell.number < 0 ? cell.letter : cell.number"></v-card-title>
                     </v-card>
                 </v-col>
             </v-row>
@@ -48,9 +53,6 @@
 .ballHeader {
     font-weight: bold;
     text-align: center;
-}
-.ballMarked {
-    background-color: #FF0000; /* for when a cell has a ball present */
 }
 .ballCard {
     text-align: center;
