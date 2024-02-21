@@ -50,19 +50,18 @@ onMounted(async () => {
 
 
     <v-main class="d-flex align-center justify-center" style="min-height: 300px;">
-      <v-sheet :height="500" :width="500" rounded>
-        <div style="display: flex; height: 500px; width: 500px;">
-          <v-card class="mx-auto" width="500" prepend-icon="mdi-home" >
-            <template v-slot:title>
-              BINGO
-            </template>
-
-            <v-card-text>
-              <board :ballData="ballStates" />
-            </v-card-text>
-          </v-card>
-        </div>
-      </v-sheet>
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-card class="mx-auto" prepend-icon="mdi-home">
+                <template v-slot:title>BINGO</template>
+              </v-card>
+            </v-col>
+          </v-row>
+          <!-- <v-row> -->
+            <board :ballData="ballStates" />
+          <!-- </v-row> -->
+      </v-container>
     </v-main>
 
     <v-bottom-navigation>

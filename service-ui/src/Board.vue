@@ -30,33 +30,29 @@
 </script>
 
 <template>
-    <div class="bingo-board">
-        <table>
-
-            <tbody>
-                <tr v-for="(row, rowIndex) in getBoard()" :key="rowIndex">
-                    <td v-for="(cell, colIndex) in row" :key="colIndex">
-                        <div :class="[cell.class, { 'ballMarked' : cell.marked }]"> {{ cell.number }}</div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
+    <!-- <v-card class="mx-auto" max-width="100%"> -->
+        <!-- <v-container fluid> -->
+            <v-row v-for="(row, rowIndex) in getBoard()" :key="rowIndex" dense>
+                <v-col v-for="(cell, colIndex) in row" :key="colIndex" :cols="16">
+                    <v-card>
+                        <v-card-title v-text=cell.number :class="[cell.class, { 'ballMarked' : cell.marked }]"></v-card-title>
+                    </v-card>
+                </v-col>
+            </v-row>
+        <!-- </v-container> -->
+    <!-- </v-card> -->
 </template>
 
 
 <style scoped>
-.bingo-board {
-    /* bingo board styles */
-}
-.ballCard {
-    /* cell styles */
-}
 .ballHeader {
     font-weight: bold;
+    text-align: center;
 }
 .ballMarked {
     background-color: #FF0000; /* for when a cell has a ball present */
+}
+.ballCard {
+    text-align: center;
 }
 </style>
