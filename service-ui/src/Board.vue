@@ -40,7 +40,7 @@
             <v-row v-for="(row, rowIndex) in getBoard()" :key="rowIndex" dense>
                 <v-col v-for="(cell, colIndex) in row" :key="colIndex" :cols="16">
                     <v-card elevation="4" key="foo" :color=cell.color variant="flat" :class="cell.class" link @click="toggleCard(cell.number-1)">
-                        <v-card-title v-text="cell.number < 0 ? cell.letter : cell.number"></v-card-title>
+                        <v-card-text class="text-h4" v-text="cell.number < 0 ? cell.letter : cell.number"></v-card-text>
                     </v-card>
                 </v-col>
             </v-row>

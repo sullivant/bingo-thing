@@ -48,7 +48,7 @@ function toggleSimulate() {
 <template>
 
 <v-layout class="rounded rounded-md">
-  <v-app-bar color="surface-variant" title="Bingo Thing"></v-app-bar>
+  <!-- <v-app-bar color="surface-variant" title="Bingo Thing"></v-app-bar> -->
 
   <v-navigation-drawer expand-on-hover rail>
       <v-divider></v-divider>
@@ -71,14 +71,34 @@ function toggleSimulate() {
         <v-container>
           <v-row>
             <v-col>
-              <v-card class="mx-auto" prepend-icon="mdi-home" color="grey-lighten-2" >
-                <template v-slot:title>BINGO</template>
+              <v-card class="mx-auto" color="grey-lighten-2">
+                <v-card-title>
+                  <v-icon icon="mdi-fire-truck" color="red" size="small"></v-icon> Winsted Fire Department - BINGO</v-card-title>
               </v-card>
             </v-col>
           </v-row>
           <!-- <v-row> -->
-            <board :ballData="ballStates" />
+          <board :ballData="ballStates" />
           <!-- </v-row> -->
+
+          <v-row>
+            <v-carousel :show-arrows="false" delimiter-icon="mdi-square" cycle hide-delimiter-background >
+              <v-carousel-item
+                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                cover
+              ></v-carousel-item>
+
+              <v-carousel-item
+                src="https://cdn.vuetifyjs.com/images/cards/hotel.jpg"
+                cover
+              ></v-carousel-item>
+
+              <v-carousel-item
+                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                cover
+              ></v-carousel-item>
+            </v-carousel>
+          </v-row>
       </v-container>
     </v-main>
 
