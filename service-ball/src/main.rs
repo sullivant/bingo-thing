@@ -5,9 +5,22 @@ use warp::http::StatusCode;
 use warp::reply::json;
 use rand::Rng;
 
+use std::error::Error;
+use std::thread;
+use std::time::Duration;
+use rppal::gpio::Gpio;
+use rppal::system::DeviceInfo;
+
+const GPIO_STATUS_LED: u8 = 21;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
+
+    // Just turn the GPIO on to test the ability at all
+    println!("Turning status LED on from {}.", DeviceInfo::new()?.model());
+    let mut pin = Gpio::new()?.get(GPIO_STATUS_LED)?.into_output();
+    pin.set_high();
+
 
     // GET /health
     let route_health = warp::path!("health")
@@ -23,6 +36,8 @@ async fn main() {
 
     println!("Starting service-ball server.");
     warp::serve(routes).run(([0, 0, 0, 0], 8000)).await;
+
+    Ok(())
 }
 
 /// GET /balls
