@@ -3,6 +3,7 @@ services:
 
   service-ball:
     build: ./service-ball
+    privileged: true # for access to the GPIO pins
     ports: 
       - "8000:8000"
 
