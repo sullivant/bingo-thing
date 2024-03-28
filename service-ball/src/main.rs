@@ -55,14 +55,14 @@ mod filters {
    
     // pin related filters
     pub fn route_filters(pin: OutPin) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
-        get_ball_states()
+        get_ball_states(pin.clone())
         .or(status_toggle(pin.clone()))
     }
 
-    pub fn get_ball_states() -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
+    pub fn get_ball_states(pin: OutPin) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
         let prefix = warp::path!("balls");
         prefix.and(warp::get())
-        // .and(with_pin(pin))
+        .and(with_pin(pin))
         .and_then(handlers::get_ball_states)
     }
 
@@ -113,7 +113,9 @@ mod handlers {
     /// 
     /// TODO: Implement in hardware, for now this just returns 75 static bits that change only slightly
     ///       to mimic a game in progress.
-    pub async fn get_ball_states() -> Result<impl warp::Reply, Infallible> { 
+    pub async fn get_ball_states(pin: OutPin) -> Result<impl warp::Reply, Infallible> { 
+        let mut status_pin = pin.lock().await;
+
         let array_size = 75;
         let mut ball_states = Vec::with_capacity(array_size);
         let mut rng = rand::thread_rng();
