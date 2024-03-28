@@ -3,8 +3,6 @@ use std::error::Error;
 
 use warp::Filter;
 use warp::http::StatusCode;
-use warp::reply::json;
-use rand::Rng;
 
 
 const GPIO_STATUS_LED: u8 = 21;
@@ -13,7 +11,7 @@ const GPIO_STATUS_LED: u8 = 21;
 async fn main() -> Result<(), Box<dyn Error>> {
 
     let status_pin = io::status_pin();
-    let api = filters::status(status_pin);
+    let api = filters::route_filters(status_pin);
     let routes = api
         .with(warp::log("status"))
         .with(warp::cors().allow_any_origin());
@@ -55,9 +53,17 @@ mod filters {
     use super::io::OutPin;
     use warp::Filter;
    
-    // Status filters
-    pub fn status(pin: OutPin) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
-        status_toggle(pin.clone())
+    // pin related filters
+    pub fn route_filters(pin: OutPin) -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
+        get_ball_states()
+        .or(status_toggle(pin.clone()))
+    }
+
+    pub fn get_ball_states() -> impl Filter<Extract = (impl warp::Reply,), Error = warp::Rejection> + Clone {
+        let prefix = warp::path!("balls");
+        prefix.and(warp::get())
+        // .and(with_pin(pin))
+        .and_then(handlers::get_ball_states)
     }
 
     // POST on /status/toggle will toggle status light
@@ -81,7 +87,12 @@ mod handlers {
     use warp::http::StatusCode;
     use rppal::gpio::{Gpio, InputPin, Level, OutputPin};
     use rppal::system::DeviceInfo;
+    use warp::reply::json;
+    use rand::Rng;
 
+    /// PUT /status/toggle
+    /// 
+    /// Does the actual toggling of the status led
     pub async fn toggle_status_led(pin: OutPin) -> Result<impl warp::Reply, Infallible> {
         println!("Toggling status led.");  
         let mut status_pin = pin.lock().await;
@@ -94,28 +105,28 @@ mod handlers {
     
        Ok(warp::reply::with_status(format!("Toggled status led state."),  StatusCode::OK))
     }
-    
 
-}
+    /// GET /balls
+    /// 
+    /// Will return the current state of all ball contact switches (75 in total).  This is done
+    /// by querying the GPIO that is connected to the PISO Shift Registers.
+    /// 
+    /// TODO: Implement in hardware, for now this just returns 75 static bits that change only slightly
+    ///       to mimic a game in progress.
+    pub async fn get_ball_states() -> Result<impl warp::Reply, Infallible> { 
+        let array_size = 75;
+        let mut ball_states = Vec::with_capacity(array_size);
+        let mut rng = rand::thread_rng();
 
-
-
-/// GET /balls
-/// 
-/// Will return the current state of all ball contact switches (75 in total).  This is done
-/// by querying the GPIO that is connected to the PISO Shift Registers.
-/// 
-/// TODO: Implement in hardware, for now this just returns 75 static bits that change only slightly
-///       to mimic a game in progress.
-pub async fn handle_ball_state() -> Result<impl warp::Reply, warp::Rejection> {
-    let array_size = 75;
-    let mut ball_states = Vec::with_capacity(array_size);
-    let mut rng = rand::thread_rng();
-
-    for _ in 0..array_size {
-        let this_bit: u8 = rng.gen_range(0..=1);
-        ball_states.push(this_bit);
+        for _ in 0..array_size {
+            let this_bit: u8 = rng.gen_range(0..=1);
+            ball_states.push(this_bit);
+        }
+        
+        // Ok(warp::reply::json(&ball_states))
+        Ok(warp::reply::with_status(json(&ball_states),  StatusCode::OK))
     }
-    
-    Ok(warp::reply::with_status(json(&ball_states),  StatusCode::OK))
+
 }
+
+
