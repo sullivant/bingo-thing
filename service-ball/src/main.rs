@@ -17,7 +17,6 @@ const GPIO_SERIAL_DATA: u8 = 19; // Data sent serially from 74HC165N.
 async fn main() -> Result<(), Box<dyn Error>> {
 
     let status_pin = io::status_pin();
-    let cloned_pin = status_pin.clone();
 
     let shld_pin = io::shld_pin();
     let clk_pin = io::clk_pin();
@@ -27,8 +26,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let routes = api
         .with(warp::log("status"))
         .with(warp::cors().allow_any_origin());
-
-    io::set_status(cloned_pin);
 
     println!("Starting service-ball server.");
     warp::serve(routes).run(([0, 0, 0, 0], 8000)).await;
@@ -61,11 +58,11 @@ mod io {
         Arc::new(Mutex::new(Gpio::new().unwrap().get(super::GPIO_SERIAL_DATA).unwrap().into_input()))
     }
 
-    pub async fn set_status(status_pin: Arc<Mutex<OutputPin>>) {
-        println!("Setting Status Pin.");
-        let mut this_pin = status_pin.lock().await;
-        this_pin.set_high();
-    }
+    // pub async fn set_status(status_pin: Arc<Mutex<OutputPin>>) {
+    //     println!("Setting Status Pin.");
+    //     let mut this_pin = status_pin.lock().await;
+    //     this_pin.set_high();
+    // }
 
 }
 
@@ -131,6 +128,8 @@ mod handlers {
     use rppal::system::DeviceInfo;
     use warp::reply::json;
     use rand::Rng;
+    use std::time::Duration;
+    use std::thread::sleep;
 
     /// PUT /status/toggle
     /// 
@@ -150,19 +149,43 @@ mod handlers {
     pub async fn report_status(status_pin: OutPin, shld_pin: OutPin, clk_pin: OutPin, data_pin: InPin) -> Result<impl warp::Reply, Infallible> {
         println!("Logging status of relevant GPIO pins: ");
 
-        let status = status_pin.lock().await;
-        println!("\tSTATUS Pin: {}",status.is_set_high());
-
-        let shld = shld_pin.lock().await;
-        println!("\tSHLD Pin: {}",shld.is_set_high());
-
-        let clk = clk_pin.lock().await;
-        println!("\tCLK Pin: {}",clk.is_set_high());
-
+        let mut status = status_pin.lock().await;
+        let mut shld = shld_pin.lock().await;
+        let mut clk = clk_pin.lock().await;
         let data = data_pin.lock().await;
-        println!("\tDATA Pin: {}",data.is_high());
 
-        Ok(warp::reply::with_status(format!("Logged status of relevant GPIO pins."), StatusCode::OK))
+        // Define an array to store the input states
+        let mut input_states: [bool; 8] = [false; 8];
+
+        // Debounce settings
+        let debounce_delay = Duration::from_millis(10);
+
+        // Inform
+        status.set_high();
+
+        // Tell the system to parallel load
+        clk.set_low();
+        shld.set_low();
+        sleep(Duration::from_micros(1));
+        shld.set_high();
+
+        // Read all 8 inputs A-H
+        for i in 0..8 {
+            // Clock to read
+            clk.set_low();
+            sleep(Duration::from_micros(100));
+            clk.set_high();
+            sleep(debounce_delay);
+            let input_state = data.is_high();
+            input_states[i] = input_state;
+        }
+        
+        println!("input_states: {:?}", input_states);
+
+        sleep(Duration::from_millis(300));
+        status.set_low();
+
+        Ok(warp::reply::with_status(format!("Logged status of relevant GPIO pins. {:?}", input_states), StatusCode::OK))
     }
 
     /// GET /balls
